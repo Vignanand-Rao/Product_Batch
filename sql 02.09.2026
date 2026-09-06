@@ -1,0 +1,39 @@
+1. employee sequence by salary
+
+select emp_name, department, salary, row_number() over(order by salary desc) as rn from employees;
+
+2. salary rank across company
+  
+select emp_name, department, salary, rank() over(order by salary desc) as rnk from employees;
+
+3. salary rank without gaps
+  
+select emp_name, department, salary, dense_rank() over(order by salary desc) as rnk from employees;
+
+4. row number inside each department
+  
+select emp_name, department, salary, row_number() over(partition by department order by salary desc) as rn from employees;
+
+5. department-wise salary rank
+  
+select emp_name, department, salary, rank() over(partition by department order by salary desc) as rnk from employees;
+
+6. top 2 distinct salaries in each department
+  
+select emp_name, department, salary from (select emp_name, department, salary, dense_rank() over(partition by department order by salary desc) as rnk from employees) x where rnk<=2;
+
+7. highest-paid employee name per department
+  
+select emp_name, department, salary, first_value(emp_name) over(partition by department order by salary desc) as highest_paid from employees;
+
+8. lowest-paid employee name per department
+
+select emp_name, department, salary, last_value(emp_name) over(partition by department order by salary desc rows between unbounded preceding and unbounded following) as lowest_paid from employees;
+
+9. compare first and last salary in each department
+
+select emp_name, department, salary, first_value(salary) over(partition by department order by salary desc rows between unbounded preceding and unbounded following) as highest_salary, last_value(salary) over(partition by department order by salary desc rows between unbounded preceding and unbounded following) as lowest_salary from employees;
+
+10. 2nd highest distinct salary employees
+
+select emp_name, department, salary from (select emp_name, department, salary, dense_rank() over(order by salary desc) as rnk from employees) x where rnk=2;
