@@ -1,0 +1,215 @@
+# 1. boundary nodes
+
+class node:
+    def __init__(self,v):
+        self.val=v
+        self.left=self.right=None
+
+def make(a):
+    if not a or a[0]==-1:return None
+    r=node(a[0]);q=[r];i=1
+    while q and i<len(a):
+        x=q.pop(0)
+        if i<len(a) and a[i]!=-1:
+            x.left=node(a[i]);q.append(x.left)
+        i+=1
+        if i<len(a) and a[i]!=-1:
+            x.right=node(a[i]);q.append(x.right)
+        i+=1
+    return r
+
+def boundary(r):
+    if not r:return []
+    a=[r.val]
+    def left(x):
+        while x:
+            if x.left or x.right:a.append(x.val)
+            x=x.left or x.right
+    def leaf(x):
+        if not x:return
+        if not x.left and not x.right and x!=r:a.append(x.val)
+        leaf(x.left);leaf(x.right)
+    def right(x):
+        b=[]
+        while x:
+            if x.left or x.right:b.append(x.val)
+            x=x.right or x.left
+        a.extend(b[::-1])
+    left(r.left);leaf(r);right(r.right)
+    return a
+
+a=list(map(int,input().split()))
+r=make(a)
+print(*boundary(r))
+
+
+# 2. left view
+
+class node:
+    def __init__(self,v):
+        self.val=v
+        self.left=self.right=None
+
+def make(a):
+    if not a or a[0]==-1:return None
+    r=node(a[0]);q=[r];i=1
+    while q and i<len(a):
+        x=q.pop(0)
+        if i<len(a) and a[i]!=-1:
+            x.left=node(a[i]);q.append(x.left)
+        i+=1
+        if i<len(a) and a[i]!=-1:
+            x.right=node(a[i]);q.append(x.right)
+        i+=1
+    return r
+
+def leftview(r):
+    if not r:return []
+    q=[r];a=[]
+    while q:
+        a.append(q[0].val)
+        for _ in range(len(q)):
+            x=q.pop(0)
+            if x.left:q.append(x.left)
+            if x.right:q.append(x.right)
+    return a
+
+a=list(map(int,input().split()))
+r=make(a)
+print(*leftview(r))
+
+
+# 3. right view
+
+class node:
+    def __init__(self,v):
+        self.val=v
+        self.left=self.right=None
+
+def make(a):
+    if not a or a[0]==-1:return None
+    r=node(a[0]);q=[r];i=1
+    while q and i<len(a):
+        x=q.pop(0)
+        if i<len(a) and a[i]!=-1:
+            x.left=node(a[i]);q.append(x.left)
+        i+=1
+        if i<len(a) and a[i]!=-1:
+            x.right=node(a[i]);q.append(x.right)
+        i+=1
+    return r
+
+def rightview(r):
+    if not r:return []
+    q=[r];a=[]
+    while q:
+        a.append(q[-1].val)
+        for _ in range(len(q)):
+            x=q.pop(0)
+            if x.left:q.append(x.left)
+            if x.right:q.append(x.right)
+    return a
+
+a=list(map(int,input().split()))
+r=make(a)
+print(*rightview(r))
+
+
+# 4. lowest common ancestor
+
+class node:
+    def __init__(self,v):
+        self.val=v
+        self.left=self.right=None
+
+def make(a):
+    if not a or a[0]==-1:return None
+    r=node(a[0]);q=[r];i=1
+    while q and i<len(a):
+        x=q.pop(0)
+        if i<len(a) and a[i]!=-1:
+            x.left=node(a[i]);q.append(x.left)
+        i+=1
+        if i<len(a) and a[i]!=-1:
+            x.right=node(a[i]);q.append(x.right)
+        i+=1
+    return r
+
+def lca(r,a,b):
+    if not r or r.val==a or r.val==b:return r
+    x=lca(r.left,a,b)
+    y=lca(r.right,a,b)
+    return r if x and y else x or y
+
+a=list(map(int,input().split()))
+r=make(a)
+x,y=map(int,input().split())
+z=lca(r,x,y)
+print(z.val if z else -1)
+
+
+
+# 5. root to given node path
+
+
+class node:
+    def __init__(self,v):
+        self.val=v
+        self.left=self.right=None
+
+def make(a):
+    if not a or a[0]==-1:return None
+    r=node(a[0]);q=[r];i=1
+    while q and i<len(a):
+        x=q.pop(0)
+        if i<len(a) and a[i]!=-1:
+            x.left=node(a[i]);q.append(x.left)
+        i+=1
+        if i<len(a) and a[i]!=-1:
+            x.right=node(a[i]);q.append(x.right)
+        i+=1
+    return r
+
+def path(r,x,a):
+    if not r:return False
+    a.append(r.val)
+    if r.val==x:return True
+    if path(r.left,x,a) or path(r.right,x,a):return True
+    a.pop()
+    return False
+
+a=list(map(int,input().split()))
+r=make(a)
+x=int(input())
+p=[]
+path(r,x,p)
+print(*p)
+
+
+
+# 6. construct tree from inorder and preorder
+
+
+class node:
+    def __init__(self,v):
+        self.val=v
+        self.left=self.right=None
+
+def build(pre,ino):
+    if not pre:return None
+    r=node(pre[0])
+    i=ino.index(pre[0])
+    r.left=build(pre[1:i+1],ino[:i])
+    r.right=build(pre[i+1:],ino[i+1:])
+    return r
+
+def post(r):
+    if r:
+        post(r.left)
+        post(r.right)
+        print(r.val,end=" ")
+
+pre=list(map(int,input().split()))
+ino=list(map(int,input().split()))
+r=build(pre,ino)
+post(r)
