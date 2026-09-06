@@ -1,0 +1,132 @@
+# 1. delete a node from bst
+
+class node:
+    def __init__(self,v):
+        self.val=v
+        self.left=None
+        self.right=None
+
+def insert(r,v):
+    if not r:return node(v)
+    if v<r.val:r.left=insert(r.left,v)
+    else:r.right=insert(r.right,v)
+    return r
+
+def delete(r,v):
+    if not r:return r
+    if v<r.val:r.left=delete(r.left,v)
+    elif v>r.val:r.right=delete(r.right,v)
+    else:
+        if not r.left:return r.right
+        if not r.right:return r.left
+        x=r.right
+        while x.left:x=x.left
+        r.val=x.val
+        r.right=delete(r.right,x.val)
+    return r
+
+def inorder(r):
+    if r:
+        inorder(r.left)
+        print(r.val,end=" ")
+        inorder(r.right)
+
+a=list(map(int,input().split()))
+v=int(input())
+r=None
+for x in a:r=insert(r,x)
+r=delete(r,v)
+inorder(r)
+
+
+
+# 2. check if binary tree is bst
+
+
+class node:
+    def __init__(self,v):
+        self.val=v
+        self.left=None
+        self.right=None
+
+def make(a):
+    if not a or a[0]==-1:return None
+    r=node(a[0]);q=[r];i=1
+    while q and i<len(a):
+        x=q.pop(0)
+        if i<len(a) and a[i]!=-1:
+            x.left=node(a[i]);q.append(x.left)
+        i+=1
+        if i<len(a) and a[i]!=-1:
+            x.right=node(a[i]);q.append(x.right)
+        i+=1
+    return r
+
+def check(r,lo=-10**9,hi=10**9):
+    if not r:return True
+    if r.val<=lo or r.val>=hi:return False
+    return check(r.left,lo,r.val) and check(r.right,r.val,hi)
+
+a=list(map(int,input().split()))
+r=make(a)
+print("yes" if check(r) else "no")
+
+
+# 3. kth smallest and kth largest in bst
+
+
+class node:
+    def __init__(self,v):
+        self.val=v
+        self.left=None
+        self.right=None
+
+def insert(r,v):
+    if not r:return node(v)
+    if v<r.val:r.left=insert(r.left,v)
+    else:r.right=insert(r.right,v)
+    return r
+
+def inorder(r,a):
+    if r:
+        inorder(r.left,a)
+        a.append(r.val)
+        inorder(r.right,a)
+
+a=list(map(int,input().split()))
+k=int(input())
+r=None
+for x in a:r=insert(r,x)
+b=[]
+inorder(r,b)
+print(b[k-1],b[-k])
+
+
+# 4. check if bst is balanced
+
+
+class node:
+    def __init__(self,v):
+        self.val=v
+        self.left=None
+        self.right=None
+
+def insert(r,v):
+    if not r:return node(v)
+    if v<r.val:r.left=insert(r.left,v)
+    else:r.right=insert(r.right,v)
+    return r
+
+def height(r):
+    if not r:return 0
+    l=height(r.left)
+    rr=height(r.right)
+    if l==-1 or rr==-1 or abs(l-rr)>1:return -1
+    return max(l,rr)+1
+
+a=list(map(int,input().split()))
+r=None
+for x in a:r=insert(r,x)
+print("yes" if height(r)!=-1 else "no")
+
+
