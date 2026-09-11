@@ -42,7 +42,7 @@ n=int(input())
 a=list(map(int,input().split()))
 st=SegTree(a)
 q=int(input())
-for _ in range(q):
+for i in range(q):
     x=list(map(int,input().split()))
     if x[0]==1:
         st.change(x[1],x[2])
@@ -93,7 +93,7 @@ n=int(input())
 a=list(map(int,input().split()))
 st=SegTree(a)
 q=int(input())
-for _ in range(q):
+for i in range(q):
     x=list(map(int,input().split()))
     if x[0]==1:
         st.change(x[1],x[2])
@@ -144,7 +144,7 @@ n=int(input())
 a=list(map(int,input().split()))
 st=SegTree(a)
 q=int(input())
-for _ in range(q):
+for i in range(q):
     x=list(map(int,input().split()))
     if x[0]==1:
         st.change(x[1],x[2])
@@ -196,7 +196,7 @@ n=int(input())
 a=list(map(int,input().split()))
 st=SegTree(a)
 q=int(input())
-for _ in range(q):
+for i in range(q):
     x=list(map(int,input().split()))
     if x[0]==1:
         st.change(x[1],x[2])
@@ -249,7 +249,7 @@ n=int(input())
 a=list(map(int,input().split()))
 st=SegTree(a)
 q=int(input())
-for _ in range(q):
+for i in range(q):
     x=list(map(int,input().split()))
     if x[0]==1:
         st.change(x[1],x[2])
@@ -301,7 +301,7 @@ n=int(input())
 a=list(map(int,input().split()))
 st=SegTree(a)
 q=int(input())
-for _ in range(q):
+for i in range(q):
     x=list(map(int,input().split()))
     if x[0]==1:
         st.change(x[1],x[2])
@@ -358,7 +358,7 @@ n=int(input())
 a=list(map(int,input().split()))
 st=SegTree(a)
 q=int(input())
-for _ in range(q):
+for i in range(q):
     x=list(map(int,input().split()))
     if x[0]==1:
         st.change(x[1],x[2])
@@ -373,7 +373,7 @@ from bisect import bisect_left,bisect_right
 n=int(input())
 a=list(map(int,input().split()))
 q=int(input())
-for _ in range(q):
+for i in range(q):
     l,r=map(int,input().split())
     ans=0
     while l<=r:
