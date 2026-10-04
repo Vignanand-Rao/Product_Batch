@@ -1,0 +1,29 @@
+-- 1
+select d.dept_id,d.dept_name,count(e.emp_id) as employee_count,coalesce(avg(e.salary),0) as average_salary,coalesce(min(e.salary),0) as minimum_salary,coalesce(max(e.salary),0) as maximum_salary from departments d left join employees e on d.dept_id=e.dept_id group by d.dept_id,d.dept_name;
+
+-- 2
+with x as (select emp_name,dept_id,salary,dense_rank() over(partition by dept_id order by salary desc) as r from employees) select emp_name,dept_id,salary from x where r=2;
+
+-- 3
+select e.emp_name,e.dept_id,e.salary from employees e where e.salary>(select avg(x.salary) from employees x where x.dept_id=e.dept_id);
+
+-- 4
+select m.emp_name as manager_name,m.salary as manager_salary,count(e.emp_id) as team_count,sum(e.salary) as team_salary from employees m join employees e on m.emp_id=e.manager_id group by m.emp_id,m.emp_name,m.salary having count(e.emp_id)>=2;
+
+-- 5
+with x as (select p.project_id,p.project_name,e.emp_id,e.emp_name,ep.hours_worked,dense_rank() over(partition by p.project_id order by ep.hours_worked desc) as r from employeeprojects ep join employees e on ep.emp_id=e.emp_id join projects p on ep.project_id=p.project_id) select project_id,project_name,emp_id,emp_name,hours_worked from x where r<=2 order by project_id,r;
+
+-- 6
+select distinct d.dept_id,d.dept_name from departments d join employees e on d.dept_id=e.dept_id where not exists (select 1 from projects p where p.dept_id=d.dept_id);
+
+-- 7
+with x as (select order_date,sum(amount) as daily_revenue from orders where status='completed' group by order_date) select order_date,daily_revenue,sum(daily_revenue) over(order by order_date) as cumulative_revenue from x;
+
+-- 8
+with x as (select customer_id,sum(amount) as total_amount from orders where status='completed' group by customer_id) select customer_id,total_amount,case when total_amount>=100000 then 'platinum' when total_amount>=50000 then 'gold' when total_amount>=20000 then 'silver' else 'bronze' end as customer_class from x;
+
+-- 9
+with x as (select distinct customer_id,str_to_date(date_format(order_date,'%Y-%m-01'),'%Y-%m-%d') as month_start from orders),y as (select customer_id,month_start,lead(month_start,1) over(partition by customer_id order by month_start) as next_month,lead(month_start,2) over(partition by customer_id order by month_start) as third_month from x) select distinct customer_id from y where next_month=date_add(month_start,interval 1 month) and third_month=date_add(month_start,interval 2 month);
+
+-- 10
+with x as (select emp_name,dept_id,salary,max(salary) over(partition by dept_id) as high_sal,min(salary) over(partition by dept_id) as low_sal from employees) select emp_name,dept_id,salary,case when salary=high_sal then 'highest' when salary=low_sal then 'lowest' end as salary_type,high_sal-low_sal as salary_difference from x where salary=high_sal or salary=low_sal;
